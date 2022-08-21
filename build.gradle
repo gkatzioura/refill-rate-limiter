@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'java'
+    id "org.sonarqube" version "3.4.0.2513"
 }
 
 apply plugin: 'java'
@@ -50,4 +51,10 @@ test {
     jvmArgs '--enable-preview'
 }
 
-
+sonarqube {
+    properties {
+        property "sonar.projectKey", "gkatzioura_refill-rate-limiter"
+        property "sonar.organization", "refil-rate-limiter"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
