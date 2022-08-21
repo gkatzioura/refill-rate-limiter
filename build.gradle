@@ -2,6 +2,7 @@ plugins {
     id 'groovy'
     id 'java'
     id "org.sonarqube" version "3.4.0.2513"
+    id 'jacoco'
 }
 
 apply plugin: 'java'
@@ -49,6 +50,11 @@ dependencies {
 test {
     useJUnit()
     jvmArgs '--enable-preview'
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }
 
 sonarqube {
