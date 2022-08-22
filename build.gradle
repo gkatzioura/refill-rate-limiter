@@ -54,16 +54,19 @@ test {
 }
 
 jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
     reports {
         xml.required = true
     }
 }
+
+def allTestCoverageFile = "${rootProject.projectDir}/build/reports/jacoco/report.xml"
 
 sonarqube {
     properties {
         property "sonar.projectKey", "gkatzioura_refill-rate-limiter"
         property "sonar.organization", "refil-rate-limiter"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", allTestCoverageFile
     }
 }
+
