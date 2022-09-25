@@ -1,3 +1,22 @@
+/*
+ *
+ *  Copyright 2022 Emmanouil Gkatziouras
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
+
 package io.github.resilience4j.ratelimiter;
 
 
@@ -9,7 +28,7 @@ import io.vavr.control.Either;
 import static java.util.Objects.requireNonNull;
 
 /**
- * {@link RefillRateLimiter} is a permission rate based Rate Limiter.
+ * {@link io.github.resilience4j.ratelimiter.internal.RefillRateLimiter} is a permission rate based Rate Limiter.
  * Instead of resetting permits based on a permission period the permission release is based on a rate.
  * Therefore {@link RefillRateLimiterConfig#nanosPerPermit} is used which is a product of the division
  * of {@link RateLimiterConfig#limitRefreshPeriod} to {@link RateLimiterConfig#limitForPeriod}.

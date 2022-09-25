@@ -6,6 +6,8 @@ plugins {
 }
 
 apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 group 'com.gkatzioura'
 version '1.0-SNAPSHOT'
@@ -70,3 +72,72 @@ sonarqube {
     }
 }
 
+task sourcesJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'io.github.gkatzioura'
+            artifactId 'refill-rate-limiter'
+            version '0.1-SNAPSHOT'
+
+            from components.java
+
+            artifact(sourcesJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+            pom {
+                name = 'refill-rate-limiter'
+                description = ''
+                url = 'https://github.com/gkatzioura/refill-rate-limiter'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'gkatzioura'
+                        name = 'Emmanouil Gkatziouras'
+                        email = 'gkatzioura@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/gkatzioura/refill-rate-limiter.git'
+                    developerConnection = 'scm:git:https://github.com/gkatzioura/refill-rate-limiter.git'
+                    url = 'https://github.com/gkatzioura/refill-rate-limiter'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}

@@ -17,7 +17,7 @@
  *
  */
 
-package io.github.resilience4j.ratelimiter.internall;
+package io.github.resilience4j.ratelimiter.internal;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,8 +30,6 @@ import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.event.RateLimiterOnDrainedEvent;
 import io.github.resilience4j.ratelimiter.event.RateLimiterOnFailureEvent;
 import io.github.resilience4j.ratelimiter.event.RateLimiterOnSuccessEvent;
-import io.github.resilience4j.ratelimiter.internal.AtomicRateLimiter;
-import io.github.resilience4j.ratelimiter.internal.RateLimiterEventProcessor;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.Map;
 import static java.lang.Integer.min;
@@ -41,11 +39,11 @@ import static java.util.concurrent.locks.LockSupport.parkNanos;
 
 /**
  * {@link RefillRateLimiter} has a max capacity of permits refilled periodically.
- * <p>Each period has duration of {@link RefillRateLimiterConfig#limitRefreshPeriod} in nanoseconds.
+ * <p>Each period has duration of {@link RateLimiterConfig#limitRefreshPeriod} in nanoseconds.
  * <p>By contract the initial {@link RefillRateLimiter.State#activePermissions} are set
  * to be the same with{@link RefillRateLimiterConfig#permitCapacity}
  * <p>A ratio of permit per nanoseconds is calculated using
- * {@link RefillRateLimiterConfig#limitRefreshPeriod} and {@link RefillRateLimiterConfig#limitForPeriod}.
+ * {@link RateLimiterConfig#limitRefreshPeriod} and {@link RateLimiterConfig#limitForPeriod}.
  * On a permit request the permits that should have been replenished are calculated based on the nanos passed and the ratio of nanos per permit.
  * For the {@link RefillRateLimiter} callers it is looks like a token bucket supporting bursts and a gradual refill,
  * under the hood there is some optimisations that will skip this refresh if {@link RefillRateLimiter} is not used actively.
@@ -208,7 +206,8 @@ public class RefillRateLimiter implements RateLimiter {
     }
 
     /**
-     * Calculates time elapsed from the class loading.
+     * Calculates time elapsed since the class loading.
+     * @return nanos since class loading took effect.
      */
     protected long currentNanoTime() {
         return nanoTime() - nanoTimeStart;
