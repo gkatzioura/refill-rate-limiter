@@ -3,11 +3,9 @@ plugins {
     id 'java'
     id "org.sonarqube" version "3.4.0.2513"
     id 'jacoco'
+    id 'maven-publish'
+    id 'signing'
 }
-
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
 group 'com.gkatzioura'
 version '1.0-SNAPSHOT'
@@ -72,20 +70,9 @@ sonarqube {
     }
 }
 
-task sourcesJar(type: Jar) {
-    classifier "sources"
-    from sourceSets.main.allJava
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier "javadoc"
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives jar
-    archives sourcesJar
-    archives javadocJar
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 publishing {
@@ -94,14 +81,14 @@ publishing {
             groupId 'io.github.gkatzioura'
             artifactId 'refill-rate-limiter'
             version '0.1-SNAPSHOT'
-
             from components.java
-
-            artifact(sourcesJar) {
-                classifier = 'sources'
-            }
-            artifact(javadocJar) {
-                classifier = 'javadoc'
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
             }
             pom {
                 name = 'refill-rate-limiter'
@@ -139,5 +126,15 @@ publishing {
                 password ossrhPassword
             }
         }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }
