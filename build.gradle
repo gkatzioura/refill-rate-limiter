@@ -5,10 +5,8 @@ plugins {
     id 'jacoco'
     id 'maven-publish'
     id 'signing'
+    id 'net.researchgate.release' version '3.0.2'
 }
-
-group 'com.gkatzioura'
-version '1.0-SNAPSHOT'
 
 ext {
     junitVersion = '4.12'
@@ -80,7 +78,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId 'io.github.gkatzioura'
             artifactId 'refill-rate-limiter'
-            version '0.1-SNAPSHOT'
+            version version
             from components.java
             versionMapping {
                 usage('java-api') {
@@ -115,6 +113,7 @@ publishing {
             }
         }
     }
+
     repositories {
         maven {
             def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -137,4 +136,9 @@ javadoc {
     if(JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
     }
+}
+
+release {
+    failOnUnversionedFiles = false
+    failOnCommitNeeded = false
 }
