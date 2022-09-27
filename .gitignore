@@ -115,4 +115,4 @@ gradle-app.setting
 
 ### GPG
 *.gpg
-gradle.properties
+deployment.gradle
