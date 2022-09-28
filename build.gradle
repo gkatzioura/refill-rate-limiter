@@ -73,6 +73,24 @@ java {
     withSourcesJar()
 }
 
+
+apply from: 'deployment.gradle'
+
+import org.gradle.plugins.signing.Sign
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.allTasks.any { it instanceof Sign }) {
+
+        def id = keyId
+        def file = secretKeyRingFile
+        def password = password
+
+        allprojects { ext."signing.keyId" = id }
+        allprojects { ext."signing.secretKeyRingFile" = file }
+        allprojects { ext."signing.password" = password }
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -121,12 +139,15 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
             credentials {
-                username ossrhUsername
-                password ossrhPassword
+                username centralUsername
+                password centralPassword
             }
         }
     }
 }
+
+
+
 
 signing {
     sign publishing.publications.mavenJava
@@ -142,3 +163,4 @@ release {
     failOnUnversionedFiles = false
     failOnCommitNeeded = false
 }
+
