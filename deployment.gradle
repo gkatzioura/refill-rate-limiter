@@ -3,6 +3,6 @@ ext {
   password = 'placeholder'
   secretKeyRingFile = 'placeholder'
 
-  ossrhUsername = 'placeholder'
-  ossrhPassword = 'placeholder'
+  centralUsername = 'placeholder'
+  centralPassword = 'placeholder'
 }
