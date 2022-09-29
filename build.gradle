@@ -164,3 +164,4 @@ release {
     failOnCommitNeeded = false
 }
 
+afterReleaseBuild.dependsOn publish
