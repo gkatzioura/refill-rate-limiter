@@ -54,9 +54,7 @@ jobs:
         GPG_KEY: ${{ secrets.GPG_KEY }}
         DEPLOYMENT_GRADLE: ${{ secrets.DEPLOYMENT_GRADLE }}
       run: |
-        pwd
         echo $GPG_KEY | base64 --decode > key.gpg
         echo $DEPLOYMENT_GRADLE| base64 --decode > deployment.gradle
-        ls -l
-        ./gradlew release
+        ./gradlew publish
 
