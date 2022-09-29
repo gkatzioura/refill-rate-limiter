@@ -50,6 +50,9 @@ jobs:
 #      run: ./gradlew build sonarqube --info -PossrhUsername=placeholder -PossrhPassword=placeholder
     - name: Publish to Sonatype
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      env:
+        GPG_KEY: ${{ secrets.GPG_KEY }}
+        DEPLOYMENT_GRADLE: ${{ secrets.DEPLOYMENT_GRADLE }}
       run: |
         pwd
         echo $GPG_KEY | base64 --decode > key.gpg
