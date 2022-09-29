@@ -1,8 +1,0 @@
-ext {
-  keyId = 'placeholder'
-  password = 'placeholder'
-  secretKeyRingFile = 'placeholder'
-
-  centralUsername = 'placeholder'
-  centralPassword = 'placeholder'
-}
