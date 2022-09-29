@@ -54,5 +54,6 @@ jobs:
         pwd
         echo $GPG_KEY | base64 --decode > key.gpg
         echo $DEPLOYMENT_GRADLE| base64 --decode > deployment.gradle
+        ls -l
         ./gradlew release
 
