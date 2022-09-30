@@ -84,8 +84,8 @@ gradle.taskGraph.whenReady { taskGraph ->
         def env = System.getenv()
 
         def id = env.getOrDefault("KEY_ID", keyId)
-        def file = env.getOrDefault("SECRET_KEY_RING_FILE", keyId)
-        def password = env.getOrDefault("PASSWORD")
+        def file = env.getOrDefault("SECRET_KEY_RING_FILE", secretKeyRingFile)
+        def password = env.getOrDefault("PASSWORD",password)
 
         allprojects { ext."signing.keyId" = id }
         allprojects { ext."signing.secretKeyRingFile" = file }
