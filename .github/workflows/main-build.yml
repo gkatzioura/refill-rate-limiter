@@ -38,16 +38,12 @@ jobs:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: ${{ runner.os }}-gradle
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
-#    - name: Build and analyze
-#      if: env.SONAR_TOKEN != null && env.SONAR_TOKEN != ''
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-#        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#      run: ./gradlew build sonarqube --info -PossrhUsername=placeholder -PossrhPassword=placeholder
+    - name: Build and analyze
+      if: env.SONAR_TOKEN != null && env.SONAR_TOKEN != ''
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: ./gradlew build sonarqube --info -PossrhUsername=placeholder -PossrhPassword=placeholder
     - name: Publish to Sonatype
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       env:
