@@ -47,10 +47,14 @@ jobs:
     - name: Publish to Sonatype
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       env:
-        GPG_KEY: ${{ secrets.GPG_KEY }}
+        CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+        CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+        KEY_ID: ${{ secrets.KEY_ID }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        SECRET_KEY_RING_FILE: ${{ secrets.SECRET_KEY_RING_FILE }}
         DEPLOYMENT_GRADLE: ${{ secrets.DEPLOYMENT_GRADLE }}
       run: |
-        echo $GPG_KEY | base64 --decode > key.gpg
+        echo $GPG_KEY | base64 --decode > refill-rate-limiter.gpg
         echo $DEPLOYMENT_GRADLE| base64 --decode > deployment.gradle
         ./gradlew publish
 

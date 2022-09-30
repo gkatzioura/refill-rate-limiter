@@ -81,9 +81,11 @@ import org.gradle.plugins.signing.Sign
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.allTasks.any { it instanceof Sign }) {
 
-        def id = keyId
-        def file = secretKeyRingFile
-        def password = password
+        def env = System.getenv()
+
+        def id = env.getOrDefault("KEY_ID", keyId)
+        def file = env.getOrDefault("SECRET_KEY_RING_FILE", keyId)
+        def password = env.getOrDefault("PASSWORD")
 
         allprojects { ext."signing.keyId" = id }
         allprojects { ext."signing.secretKeyRingFile" = file }
@@ -139,8 +141,10 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
 
             credentials {
-                username centralUsername
-                password centralPassword
+                def env = System.getenv()
+
+                username env.getOrDefault("CENTRAL_USERNAME",centralUsername)
+                password env.getOrDefault("CENTRAL_PASSWORD",centralPassword)
             }
         }
     }
