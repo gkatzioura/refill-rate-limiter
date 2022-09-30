@@ -31,7 +31,6 @@ jobs:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           KEY_ID: ${{ secrets.KEY_ID }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          SECRET_KEY_RING_FILE: ${{ secrets.SECRET_KEY_RING_FILE }}
           GPG_KEY: ${{ secrets.GPG_KEY }}
           DEPLOYMENT_GRADLE: ${{ secrets.DEPLOYMENT_GRADLE }}
         run: |

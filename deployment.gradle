@@ -1,7 +1,7 @@
 ext {
   keyId = 'placeholder'
   password = 'placeholder'
-  secretKeyRingFile = 'placeholder'
+  secretKeyRingFile = 'refill-rate-limiter.gpg'
 
   centralUsername = 'placeholder'
   centralPassword = 'placeholder'
