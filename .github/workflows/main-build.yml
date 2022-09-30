@@ -55,6 +55,5 @@ jobs:
         DEPLOYMENT_GRADLE: ${{ secrets.DEPLOYMENT_GRADLE }}
       run: |
         echo $GPG_KEY | base64 --decode > refill-rate-limiter.gpg
-        echo $DEPLOYMENT_GRADLE| base64 --decode > deployment.gradle
         ./gradlew publish
 
