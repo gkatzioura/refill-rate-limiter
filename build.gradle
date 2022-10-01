@@ -1,0 +1,171 @@
+plugins {
+    id 'groovy'
+    id 'java'
+    id "org.sonarqube" version "3.4.0.2513"
+    id 'jacoco'
+    id 'maven-publish'
+    id 'signing'
+    id 'net.researchgate.release' version '3.0.2'
+}
+
+ext {
+    junitVersion = '4.12'
+    mockitoVersion = '3.12.4'
+    powermockVersion = "2.0.9"
+    awaitilityVersion = '1.7.0'
+    assertjVersion = '3.18.1'
+    logbackVersion = '1.2.3'
+    groovyVersion = '2.5.6'
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ["-Xlint:unchecked", "-parameters"]
+}
+
+dependencies {
+    implementation "io.github.resilience4j:resilience4j-ratelimiter:1.7.1"
+
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "ch.qos.logback:logback-classic:${logbackVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.powermock:powermock-core:${powermockVersion}"
+    testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
+    testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
+    testImplementation "com.jayway.awaitility:awaitility:${awaitilityVersion}"
+    testImplementation "com.statemachinesystems:mock-clock:1.0"
+    testImplementation "org.codehaus.groovy:groovy-test:${groovyVersion}"
+}
+
+test {
+    useJUnit()
+    jvmArgs '--enable-preview'
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+def allTestCoverageFile = "${rootProject.projectDir}/build/reports/jacoco/report.xml"
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "gkatzioura_refill-rate-limiter"
+        property "sonar.organization", "refil-rate-limiter"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", allTestCoverageFile
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+
+apply from: 'deployment.gradle'
+
+import org.gradle.plugins.signing.Sign
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.allTasks.any { it instanceof Sign }) {
+
+        def env = System.getenv()
+
+        def id = env.getOrDefault("KEY_ID", keyId)
+        def file = env.getOrDefault("SECRET_KEY_RING_FILE", secretKeyRingFile)
+        def password = env.getOrDefault("PASSWORD",password)
+
+        allprojects { ext."signing.keyId" = id }
+        allprojects { ext."signing.secretKeyRingFile" = file }
+        allprojects { ext."signing.password" = password }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'io.github.gkatzioura'
+            artifactId 'refill-rate-limiter'
+            version version
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'refill-rate-limiter'
+                description = 'A rate limiter implementation close to Token Bucket'
+                url = 'https://github.com/gkatzioura/refill-rate-limiter'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'gkatzioura'
+                        name = 'Emmanouil Gkatziouras'
+                        email = 'gkatzioura@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/gkatzioura/refill-rate-limiter.git'
+                    developerConnection = 'scm:git:https://github.com/gkatzioura/refill-rate-limiter.git'
+                    url = 'https://github.com/gkatzioura/refill-rate-limiter'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                def env = System.getenv()
+
+                username env.getOrDefault("CENTRAL_USERNAME",centralUsername)
+                password env.getOrDefault("CENTRAL_PASSWORD",centralPassword)
+            }
+        }
+    }
+}
+
+
+
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+release {
+    failOnUnversionedFiles = false
+    failOnCommitNeeded = false
+}
+
+afterReleaseBuild.dependsOn publish
