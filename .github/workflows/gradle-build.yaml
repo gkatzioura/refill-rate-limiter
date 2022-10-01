@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - main
       - 'releases/**'
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
