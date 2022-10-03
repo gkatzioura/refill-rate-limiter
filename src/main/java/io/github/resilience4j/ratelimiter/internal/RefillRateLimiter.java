@@ -255,22 +255,24 @@ public class RefillRateLimiter implements RateLimiter {
              * We have not reached the max capacity. Thus we need to calculate the extra permissions needed.
              */
             long nanosForPermissions = nanosNeededForExtraPermissions(permissionsNeededExtra, config);
-            long nanosToCurrentIndex = activeState.timeIndex + nanosForPermissions;
-
             long nanosToWait = nanosForPermissions - nanosSinceLastUpdate;
 
             if(nanosToWait>0) {
                 boolean canAcquireInTime = timeoutInNanos >= nanosToWait;
 
                 if(canAcquireInTime) {
-                    return new State(config, 0, nanosToWait, nanosToCurrentIndex);
+                    return new State(config, 0, nanosToWait, nanosToCurrentIndex(activeState, nanosForPermissions));
                 } else {
                     return new State(activeState.config, activeState.activePermissions, nanosToWait, activeState.timeIndex);
                 }
             } else {
-                return new State(config, 0, 0, nanosToCurrentIndex);
+                return new State(config, 0, 0, nanosToCurrentIndex(activeState, nanosForPermissions));
             }
         }
+    }
+
+    private long nanosToCurrentIndex(RefillRateLimiter.State activeState, long nanosForPermissions) {
+        return activeState.timeIndex + nanosForPermissions;
     }
 
     private long nanosNeededForExtraPermissions(int neededPermissions, RefillRateLimiterConfig config) {
