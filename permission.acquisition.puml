@@ -1,0 +1,173 @@
+@startuml
+concise "Available Permissions" as perm
+concise "Requested Permissions" as rp
+concise "Permits Refilled" as refill
+concise "Acquired" as acq
+
+@1
+perm is 5
+rp is 1
+acq is 1
+refill is 1
+@2
+perm is 5
+rp is 1
+acq is 1
+refill is 1
+@3
+perm is 5
+rp is 2
+acq is 1
+refill is 1
+@4
+perm is 4
+rp is 2
+acq is 1
+refill is 1
+@5
+perm is 3
+rp is 2
+acq is 1
+refill is 1
+@6
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@7
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@8
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@9
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@10
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@11
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@12
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@13
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@14
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@15
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@16
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@17
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@18
+perm is 2
+rp is 0
+acq is 1
+refill is 1
+@19
+perm is 3
+rp is 0
+acq is 1
+refill is 1
+@20
+perm is 4
+rp is 0
+acq is 1
+refill is 1
+@21
+perm is 5
+rp is 0
+acq is 1
+refill is 1
+@22
+perm is 5
+rp is 5
+acq is 1
+refill is 1
+@23
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@24
+perm is 1
+rp is 1
+acq is 1
+refill is 1
+@25
+perm is 1
+rp is 2
+acq is 0
+refill is 1
+@26
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@27
+perm is 1
+rp is 1
+acq is 1
+refill is 1
+@28
+perm is 1
+rp is 1
+acq is 1
+refill is 1
+@29
+perm is 1
+rp is 0
+acq is 1
+refill is 1
+@30
+perm is 2
+rp is 0
+acq is 1
+refill is 1
+@31
+perm is 3
+rp is 2
+acq is 1
+refill is 1
+@32
+perm is 2
+rp is 2
+acq is 1
+refill is 1
+@33
+perm is 1
+rp is 1
+acq is 1
+refill is 1
+
+@enduml
