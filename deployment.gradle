@@ -1,0 +1,8 @@
+ext {
+  keyId = 'placeholder'
+  password = 'placeholder'
+  secretKeyRingFile = 'refill-rate-limiter.gpg'
+
+  centralUsername = 'placeholder'
+  centralPassword = 'placeholder'
+}

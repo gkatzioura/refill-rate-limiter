@@ -1,0 +1,29 @@
+@startuml
+start
+
+:Request x permissions;
+:Subtract requested permissions from existing permissions;
+
+if (Is the result negative (Can fulfill permissions with existing ones)) then (Yes)
+    :Request can be fulfilled with existing permissions.\nUpdate the state with the remaining permissions;
+else (No)
+    :Calculate nanos passed since last update;
+    if(Nanos passed surpass the nanos\n needed to reach max permissions) then(Yes)
+        :Assume we have max permissions \nand remove the requested ones;
+    else (No)
+        :Calculate nanos needed to reach the number\nof remaining permissions to fulfill the request;
+        :Subtract nanos needed from the nanos passed since last update;
+        if(Nanos needed more than 0) then(Yes)
+            if(Can permissions be acquired in time) then(Yes)
+                :Permission granted. Add to the current time index\nthe nanos needed for the permissions;
+            else (No)
+                :Do not grant permissions\n leave the permissions as is,\n set same time index\n allow a timeout to happen;
+            endif
+        else (No)
+            :Permission granted. Add to the current time index\nthe nanos needed for the permissions;
+        endif
+    endif
+endif
+:Sent result/Update state;
+stop
+@enduml
