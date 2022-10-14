@@ -4,7 +4,7 @@ By using rate limiting a service can be protected by a burst of requests whether
 
 ## Introduction
 
-The `refill-rate-limiter` is a Rate Limiter implementation compatible with the rate limiter interface from [Ressilien4j](https://resilience4j.readme.io/docs/ratelimiter).
+The `refill-rate-limiter` is a Rate Limiter implementation compatible with the rate limiter interface from [Ressilien4j](https://resilience4j.readme.io/docs/ratelimiter). It is a spinoff from this [pr](https://github.com/resilience4j/resilience4j/pull/1370).
 The interface functionalities the registry as well as the configuration are supported.
 What it differs from the existing rate limiter implementations is that the refill-rate-limiter has a gradual request replenish thus the name refill.
 Essentially it acts as a Token Bucket algorithm.
